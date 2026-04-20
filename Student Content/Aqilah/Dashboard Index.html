@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🍜 Ramen Ratings Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f8;
+      color: #1a1a2e;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: 220px;
+      height: 100vh;
+      background: white;
+      border-right: 1px solid #eee;
+      padding: 28px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      color: #888;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .nav-item.active {
+      background: #eef1ff;
+      color: #4361ee;
+      font-weight: 600;
+    }
+
+    .nav-item:hover { background: #f8f9fb; color: #4361ee; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 0.75rem;
+      color: #ccc;
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    /* MAIN */
+    .main {
+      margin-left: 220px;
+      padding: 32px 36px;
+      min-height: 100vh;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .topbar h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .topbar p {
+      font-size: 0.82rem;
+      color: #aaa;
+      margin-top: 3px;
+    }
+
+    .badge {
+      background: #eef1ff;
+      color: #4361ee;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* STAT CARDS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      border: 1px solid #ebebeb;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover { transform: translateY(-3px); }
+
+    .stat-card .icon {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .stat-card h2 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .stat-card p {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 3px;
+    }
+
+    .stat-card .accent {
+      position: absolute;
+      top: 0; right: 0;
+      width: 70px; height: 70px;
+      border-radius: 0 16px 0 70px;
+    }
+
+    .stat-card:nth-child(1) .accent { background: #fff0f6; }
+    .stat-card:nth-child(2) .accent { background: #eef1ff; }
+    .stat-card:nth-child(3) .accent { background: #f0fff4; }
+    .stat-card:nth-child(4) .accent { background: #fffbf0; }
+
+    /* CHART GRID */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      border: 1px solid #ebebeb;
+      transition: transform 0.2s;
+    }
+
+    .chart-card:hover { transform: translateY(-3px); }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .chart-header h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    .chart-tag {
+      font-size: 0.72rem;
+      background: #f0f2f8;
+      color: #4361ee;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .chart-card img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: contain;
+      min-height: 280px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">🍜 RamenStats</div>
+    <div class="nav-item active">📊 Overview</div>
+    <div class="nav-item">🌍 By Country</div>
+    <div class="nav-item">🏷️ By Brand</div>
+    <div class="nav-item">⭐ Top Rated</div>
+    <div class="sidebar-footer">Ramen Ratings Dataset<br/>2012 – 2023</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Ramen Ratings Overview 🍜</h1>
+        <p>Exploring the world's best instant noodles</p>
+      </div>
+      <div class="badge">📅 2012 – 2023</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="accent"></div>
+        <div class="icon">📋</div>
+        <h2>2,521</h2>
+        <p>Total Reviews</p>
+      </div>
+      <div class="stat-card">
+        <div class="accent"></div>
+        <div class="icon">🌍</div>
+        <h2>38</h2>
+        <p>Countries</p>
+      </div>
+      <div class="stat-card">
+        <div class="accent"></div>
+        <div class="icon">🏷️</div>
+        <h2>356</h2>
+        <p>Brands</p>
+      </div>
+      <div class="stat-card">
+        <div class="accent"></div>
+        <div class="icon">⭐</div>
+        <h2>3.66</h2>
+        <p>Avg Rating</p>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Top 10 Countries by Reviews</h3>
+          <span class="chart-tag">Bar Chart</span>
+        </div>
+        <img src="Chart1.png" alt="Top Countries"/>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Average Rating by Country</h3>
+          <span class="chart-tag">Line Chart</span>
+        </div>
+        <img src="Chart2.png" alt="Avg Rating"/>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Ramen Style Distribution</h3>
+          <span class="chart-tag">Pie Chart</span>
+        </div>
+        <img src="Chart3.png" alt="Style Distribution"/>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Brand Popularity vs Avg Rating</h3>
+          <span class="chart-tag">Scatter Chart</span>
+        </div>
+        <img src="Chart4.png" alt="Brand Scatter"/>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
